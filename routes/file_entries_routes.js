@@ -1,5 +1,7 @@
 const express = require('express');
 
+const fileEntriesController = require('../controllers/file_entries_controller');
+
 const router = express.Router();
 
 router.get('/file-entries');
