@@ -1,0 +1,11 @@
+{
+  "name": "pressure_viewer_back",
+  "version": "1.0.0",
+  "description": "Pressure Viewer project. Back end part.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oleksii Prytchyn",
+  "license": "ISC"
+}
