@@ -1,13 +1,10 @@
 const FileEntry = require('../models/file_entry_model');
+const fileEntriesHelper = require('../utils/helpers/file_entry_helper');
 
 exports.getFileEntries = async (req, res, next) => {
   const fileEntries = await FileEntry.find();
   const mappedFileEntries = fileEntries.map(entry => {
-    return {
-      id: entry._id,
-      dateModified: entry.dateModified,
-      fileName: entry.fileName,
-    };
+    return fileEntriesHelper.mapFileEntryToOnlyNeededFields(entry);
   });
   res.status(200).json(mappedFileEntries);
 };
@@ -22,11 +19,7 @@ exports.createFileEntry = async (req, res, next) => {
   const result = await newFileEntry.save();
   res.status(201).json({
     message: 'Created successfully',
-    fileEntry: {
-      id: result._id,
-      dateModified: result.dateModified,
-      fileName: result.fileName,
-    },
+    fileEntry: fileEntriesHelper.mapFileEntryToOnlyNeededFields(result),
   });
 };
 
