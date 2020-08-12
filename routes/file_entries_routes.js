@@ -4,7 +4,7 @@ const fileEntriesController = require('../controllers/file_entries_controller');
 
 const router = express.Router();
 
-router.get('/file-entries');
+router.get('/file-entries', fileEntriesController.getFileEntries);
 
 router.post('/file-entries');
 
