@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/file-entries', fileEntriesController.getFileEntries);
 
-router.post('/file-entries');
+router.post('/file-entries', fileEntriesController.createFileEntry);
 
 router.delete('/file-entries/:fileEntryId');
 

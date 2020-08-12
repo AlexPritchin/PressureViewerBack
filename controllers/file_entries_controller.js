@@ -11,3 +11,23 @@ exports.getFileEntries = async (req, res, next) => {
   });
   res.status(200).json(mappedFileEntries);
 };
+
+exports.createFileEntry = async (req, res, next) => {
+  const newDateModified = req.body.dateModified;
+  const newFileName = req.body.fileName;
+  const newFileEntry = new FileEntry({
+    dateModified: newDateModified,
+    fileName: newFileName,
+  });
+  const result = await newFileEntry.save();
+  res
+    .status(201)
+    .json({
+      message: 'Created successfully',
+      fileEntry: {
+        id: result._id,
+        dateModified: result.dateModified,
+        fileName: result.fileName,
+      },
+    });
+};
