@@ -8,6 +8,6 @@ router.get('/file-entries', fileEntriesController.getFileEntries);
 
 router.post('/file-entries', fileEntriesController.createFileEntry);
 
-router.delete('/file-entries/:fileEntryId');
+router.delete('/file-entries/:fileEntryId', fileEntriesController.deleteFileEntry);
 
 module.exports = router;

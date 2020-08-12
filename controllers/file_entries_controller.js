@@ -20,14 +20,18 @@ exports.createFileEntry = async (req, res, next) => {
     fileName: newFileName,
   });
   const result = await newFileEntry.save();
-  res
-    .status(201)
-    .json({
-      message: 'Created successfully',
-      fileEntry: {
-        id: result._id,
-        dateModified: result.dateModified,
-        fileName: result.fileName,
-      },
-    });
+  res.status(201).json({
+    message: 'Created successfully',
+    fileEntry: {
+      id: result._id,
+      dateModified: result.dateModified,
+      fileName: result.fileName,
+    },
+  });
+};
+
+exports.deleteFileEntry = async (req, res, next) => {
+  const fileEntryIdForDeletion = req.params.fileEntryId;
+  const result = await FileEntry.findByIdAndRemove(fileEntryIdForDeletion);
+  res.status(200).json({ message: 'Deleted successfully' });
 };
