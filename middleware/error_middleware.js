@@ -4,3 +4,7 @@ exports.errorHandler = (error, req, res, next) => {
     .status(error.status || 500)
     .json({ message: error.message, data: error.data });
 };
+
+exports.errorHandler404 = (req, res, next) => {
+  res.status(404).json({ message: 'Route not found' });
+};

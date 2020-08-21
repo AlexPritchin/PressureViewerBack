@@ -14,6 +14,8 @@ app.use(bodyParser.json());
 
 app.use(fileEntriesRoutes);
 
+app.use(errorMiddleware.errorHandler404);
+
 app.use(errorMiddleware.errorHandler);
 
 mongoose
