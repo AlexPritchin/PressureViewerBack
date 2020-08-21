@@ -18,7 +18,7 @@ exports.createFileEntry = async (req, res, next) => {
     const newDateModified = req.body.dateModified;
     const newFileName = req.body.fileName;
     if (newDateModified == null || newFileName == null) {
-      let error = new Error('No dateModified or fileName apecified');
+      let error = new Error('No dateModified or fileName specified');
       error.status = 400;
       throw error;
     }
@@ -37,7 +37,16 @@ exports.createFileEntry = async (req, res, next) => {
 };
 
 exports.deleteFileEntry = async (req, res, next) => {
-  const fileEntryIdForDeletion = req.params.fileEntryId;
-  const result = await FileEntry.findByIdAndRemove(fileEntryIdForDeletion);
-  res.status(200).json({ message: 'Deleted successfully' });
+  try {
+    const fileEntryIdForDeletion = req.params.fileEntryId;
+    if (fileEntryIdForDeletion == null) {
+      let error = new Error('No fileEntryId specified');
+      error.status = 400;
+      throw error;
+    }
+    const result = await FileEntry.findByIdAndRemove(fileEntryIdForDeletion);
+    res.status(200).json({ message: 'Deleted successfully' });
+  } catch (error) {
+    next(error);
+  }
 };
