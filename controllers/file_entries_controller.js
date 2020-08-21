@@ -9,23 +9,31 @@ exports.getFileEntries = async (req, res, next) => {
     });
     res.status(200).json(mappedFileEntries);
   } catch (error) {
-    error.message = 'Server error';
     next(error);
   }
 };
 
 exports.createFileEntry = async (req, res, next) => {
-  const newDateModified = req.body.dateModified;
-  const newFileName = req.body.fileName;
-  const newFileEntry = new FileEntry({
-    dateModified: newDateModified,
-    fileName: newFileName,
-  });
-  const result = await newFileEntry.save();
-  res.status(201).json({
-    message: 'Created successfully',
-    fileEntry: fileEntriesHelper.mapFileEntryToOnlyNeededFields(result),
-  });
+  try {
+    const newDateModified = req.body.dateModified;
+    const newFileName = req.body.fileName;
+    if (newDateModified == null || newFileName == null) {
+      let error = new Error('No dateModified or fileName apecified');
+      error.status = 400;
+      throw error;
+    }
+    const newFileEntry = new FileEntry({
+      dateModified: newDateModified,
+      fileName: newFileName,
+    });
+    const result = await newFileEntry.save();
+    res.status(201).json({
+      message: 'Created successfully',
+      fileEntry: fileEntriesHelper.mapFileEntryToOnlyNeededFields(result),
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.deleteFileEntry = async (req, res, next) => {
