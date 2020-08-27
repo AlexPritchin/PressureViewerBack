@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+const authRoutes = require('./routes/auth_routes');
 const fileEntriesRoutes = require('./routes/file_entries_routes');
 const errorMiddleware = require('./middleware/error_middleware');
 
@@ -12,7 +13,9 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use(fileEntriesRoutes);
+app.use('/user', authRoutes);
+
+app.use('/files', fileEntriesRoutes);
 
 app.use(errorMiddleware.errorHandler404);
 
