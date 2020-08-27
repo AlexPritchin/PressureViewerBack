@@ -1,4 +1,4 @@
-const { validationResult, Result } = require('express-validator/check');
+const { validationResult, Result } = require('express-validator');
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/user_model');
@@ -6,15 +6,16 @@ const User = require('../models/user_model');
 exports.signup = async (req, res, next) => {
   try {
     const validationErrors = validationResult(req);
-    if (!validationErrors.isEmpty) {
+    console.log(validationErrors);
+    if (!validationErrors.isEmpty()) {
       const error = new Error('Validation failed');
-      error.statusCode = 422;
+      error.status = 422;
       error.data = validationErrors.array();
       throw error;
     }
     const newUserEmail = req.body.email;
     const newUserPassword = req.body.password;
-    const hashedPassword = bcrypt.hash(newUserPassword, 12);
+    const hashedPassword = await bcrypt.hash(newUserPassword, 12);
     const newUser = User({
       email: newUserEmail,
       password: hashedPassword,
