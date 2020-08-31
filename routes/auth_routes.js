@@ -30,4 +30,13 @@ router.put(
   authController.signup
 );
 
+router.post(
+  '/signin',
+  [
+    body('email').trim().not().isEmpty(),
+    body('password').trim().not().isEmpty(),
+  ],
+  authController.signin
+);
+
 module.exports = router;
