@@ -15,6 +15,13 @@ exports.signup = async (req, res, next) => {
     }
     const newUserEmail = req.body.email;
     const newUserPassword = req.body.password;
+    const newUserConfirmPassword = req.body.confirmPassword;
+    if (newUserPassword != newUserConfirmPassword) {
+      const error = new Error('Password and Confirm password must match');
+      error.statusCode = 422;
+      error.data = validationErrors.array();
+      throw error;
+    }
     const hashedPassword = await bcrypt.hash(newUserPassword, 12);
     const newUser = User({
       email: newUserEmail,
