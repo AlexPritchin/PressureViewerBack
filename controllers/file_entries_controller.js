@@ -3,7 +3,11 @@ const fileEntriesHelper = require('../utils/helpers/file_entry_helper');
 
 exports.getFileEntries = async (req, res, next) => {
   try {
-    const fileEntries = await FileEntry.find();
+    const userIdFromReq = req.userId;
+    if (!userIdFromReq) {
+      throw error;
+    }
+    const fileEntries = await FileEntry.find({userId: userIdFromReq});
     const mappedFileEntries = fileEntries.map(entry => {
       return fileEntriesHelper.mapFileEntryToOnlyNeededFields(entry);
     });
