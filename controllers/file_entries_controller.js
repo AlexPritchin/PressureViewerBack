@@ -19,6 +19,10 @@ exports.getFileEntries = async (req, res, next) => {
 
 exports.createFileEntry = async (req, res, next) => {
   try {
+    const userIdFromReq = req.userId;
+    if (!userIdFromReq) {
+      throw error;
+    }
     const newDateModified = req.body.dateModified;
     const newFileName = req.body.fileName;
     if (newDateModified == null || newFileName == null) {
@@ -29,6 +33,7 @@ exports.createFileEntry = async (req, res, next) => {
     const newFileEntry = new FileEntry({
       dateModified: newDateModified,
       fileName: newFileName,
+      userId: userIdFromReq
     });
     const result = await newFileEntry.save();
     res.status(201).json({
