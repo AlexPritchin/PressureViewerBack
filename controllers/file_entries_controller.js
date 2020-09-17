@@ -47,13 +47,23 @@ exports.createFileEntry = async (req, res, next) => {
 
 exports.deleteFileEntry = async (req, res, next) => {
   try {
+    const userIdFromReq = req.userId;
+    if (!userIdFromReq) {
+      throw error;
+    }
     const fileEntryIdForDeletion = req.params.fileEntryId;
-    if (fileEntryIdForDeletion == null) {
-      let error = new Error('No fileEntryId specified');
+    if (!fileEntryIdForDeletion) {
+      const error = new Error('No fileEntryId specified');
       error.statusCode = 400;
       throw error;
     }
-    const result = await FileEntry.findByIdAndRemove(fileEntryIdForDeletion);
+    const fileEntryForDeletion = await FileEntry.findById(fileEntryIdForDeletion);
+    if (fileEntryForDeletion.userId != userIdFromReq) {
+      const error = new Error('Wrong user id');
+      error.statusCode = 403;
+      throw error;
+    }
+    const result = await fileEntryForDeletion.remove();
     res.status(200).json({ message: 'Deleted successfully' });
   } catch (error) {
     next(error);
