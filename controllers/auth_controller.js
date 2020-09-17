@@ -1,5 +1,6 @@
 const { validationResult, Result } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const jwtoken = require('jsonwebtoken');
 
 const User = require('../models/user_model');
 const validationHelper = require('../utils/helpers/validation_helper');
@@ -59,6 +60,8 @@ exports.signin = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
+    const newToken = jwtoken.sign({id: userToLogin.id, email: userToLogin.email}, 'verysecrettoken', {expiresIn: '1h'});
+    const newRefreshToken = jwtoken.sign({id: userToLogin.id, email: userToLogin.email}, 'verysecretrefreshtoken', {expiresIn: '24h'});
     res
       .status(200)
       .json({
@@ -67,6 +70,8 @@ exports.signin = async (req, res, next) => {
           id: userToLogin._id,
           email: userToLogin.email,
           name: userToLogin.name,
+          token: newToken,
+          refreshToken: newRefreshToken
         },
       });
   } catch (error) {
