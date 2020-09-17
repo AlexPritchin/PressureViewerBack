@@ -60,8 +60,8 @@ exports.signin = async (req, res, next) => {
       error.statusCode = 401;
       throw error;
     }
-    const newToken = jwtoken.sign({id: userToLogin.id, email: userToLogin.email}, 'verysecrettoken', {expiresIn: '1h'});
-    const newRefreshToken = jwtoken.sign({id: userToLogin.id, email: userToLogin.email}, 'verysecretrefreshtoken', {expiresIn: '24h'});
+    const newToken = jwtoken.sign({userId: userToLogin.id, email: userToLogin.email}, 'verysecrettoken', {expiresIn: '1h'});
+    const newRefreshToken = jwtoken.sign({userId: userToLogin.id, email: userToLogin.email}, 'verysecretrefreshtoken', {expiresIn: '24h'});
     res
       .status(200)
       .json({
@@ -73,6 +73,32 @@ exports.signin = async (req, res, next) => {
           token: newToken,
           refreshToken: newRefreshToken
         },
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.refreshToken = (req, res, next) => {
+  try {
+    const userRefreshToken = req.body.refreshToken;
+    if (!userRefreshToken) {
+      const error = new Error('No refresh token specified');
+      error.statusCode = 401;
+      throw error;
+    }
+    const decodedRefreshToken = jwtoken.verify(userRefreshToken, 'verysecretrefreshtoken');
+    if (!decodedRefreshToken) {
+      const error = new Error('Refresh token is invalid');
+      error.statusCode = 401;
+      throw error;
+    }
+    const newToken = jwtoken.sign({userId: decodedRefreshToken.userId, email: decodedRefreshToken.email}, 'verysecrettoken', {expiresIn: '1h'});
+    res
+      .status(200)
+      .json({
+        message: 'New token generated',
+        token: newToken
       });
   } catch (error) {
     next(error);

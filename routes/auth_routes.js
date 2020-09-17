@@ -45,4 +45,6 @@ router.post(
   authController.signin
 );
 
+router.post('/refreshToken', authController.refreshToken);
+
 module.exports = router;
