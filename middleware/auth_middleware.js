@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
         throw error;
       }
     const decodedUserToken = jwtoken.verify(userToken, 'verysecrettoken');
-    if (!decodeduserToken) {
+    if (!decodedUserToken) {
         const error = new Error('Invalid token');
         error.statusCode = 401;
         throw error;
