@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 
 const authRoutes = require('./routes/auth_routes');
 const fileEntriesRoutes = require('./routes/file_entries_routes');
+const userRoutes = require('./routes/user_routes');
 const errorMiddleware = require('./middleware/error_middleware');
 
 const mongoDBConnectionString =
@@ -13,9 +14,11 @@ const app = express();
 
 app.use(bodyParser.json());
 
-app.use('/user', authRoutes);
+app.use('/auth', authRoutes);
 
 app.use('/files', fileEntriesRoutes);
+
+app.use('/user', userRoutes);
 
 app.use(errorMiddleware.errorHandler404);
 
